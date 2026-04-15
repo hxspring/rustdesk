@@ -271,6 +271,13 @@ jobs:
         run: |
           BASE_URL=${{ env.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./SignOutput
 
+      - name: Upload packaged exe artifact
+        if: env.UPLOAD_ARTIFACT == 'true'
+        uses: actions/upload-artifact@master
+        with:
+          name: rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}
+          path: ./SignOutput/rustdesk-*.exe
+
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         if: env.UPLOAD_ARTIFACT == 'true'
